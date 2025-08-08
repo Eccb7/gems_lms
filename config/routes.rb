@@ -1,6 +1,23 @@
 Rails.application.routes.draw do
   devise_for :users
-  root "home#index"
+
+  # Landing page for non-authenticated users
+  get "landing", to: "pages#landing"
+
+  # Redirect root based on authentication status
+  authenticated :user do
+    root "home#index", as: :authenticated_root
+  end
+
+  unauthenticated do
+    root "pages#landing"
+  end
+
+  # Static pages
+  get "about", to: "pages#about"
+  get "contact", to: "pages#contact"
+  get "privacy", to: "pages#privacy"
+  get "terms", to: "pages#terms"
 
   # Health check endpoint
   get "up" => "rails/health#show", as: :rails_health_check
@@ -15,9 +32,26 @@ Rails.application.routes.draw do
       post :enroll
       delete :leave
     end
+
+    # Payment routes for courses
+    resources :payments, only: [:create]
   end
 
+  # Payment management routes
+  resources :payments, only: [:index, :show] do
+    member do
+      get :mpesa_checkout
+      get :check_payment_status
+    end
+  end
+
+  # M-Pesa callback route
+  post "mpesa/callback", to: "payments#mpesa_callback", as: :mpesa_callback
+
   resources :categories, only: [ :index, :show ]
+
+  # Student dashboard (direct access)
+  get "students/dashboard", to: "students#dashboard", as: :student_dashboard
 
   # Student namespace
   namespace :student do
