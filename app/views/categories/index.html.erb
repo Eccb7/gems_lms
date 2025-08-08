@@ -1,0 +1,77 @@
+<% content_for :title, "Categories - GEMS LMS" %>
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Course Categories</h1>
+    <p class="text-gray-600 mt-2">Explore courses by subject area</p>
+  </div>
+
+  <!-- Categories Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <% @categories.each do |category| %>
+      <div class="group">
+        <%= link_to category_path(category), class: "block bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden" do %>
+          <!-- Category Icon/Image -->
+          <div class="h-32 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center relative">
+            <div class="text-white text-center">
+              <div class="text-4xl font-bold mb-2"><%= category.name.first(2).upcase %></div>
+              <div class="w-12 h-12 mx-auto bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                </svg>
+              </div>
+            </div>
+            
+            <!-- Overlay on hover -->
+            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
+          </div>
+          
+          <!-- Category Info -->
+          <div class="p-6">
+            <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+              <%= category.name %>
+            </h3>
+            <% if category.description.present? %>
+              <p class="text-sm text-gray-600 mt-2 line-clamp-2">
+                <%= truncate(category.description, length: 100) %>
+              </p>
+            <% end %>
+            
+            <div class="mt-4 flex items-center justify-between">
+              <div class="text-sm text-gray-500">
+                <%= pluralize(category.courses.published.count, 'course') %>
+              </div>
+              <div class="text-blue-600 group-hover:text-blue-800 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Empty State -->
+  <% if @categories.empty? %>
+    <div class="text-center py-12">
+      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.99 1.99 0 013 12V7a4 4 0 014-4z"></path>
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900">No categories available</h3>
+      <p class="mt-1 text-sm text-gray-500">Categories will appear here once they are created.</p>
+    </div>
+  <% end %>
+
+  <!-- Call to Action -->
+  <div class="mt-12 bg-gray-50 rounded-lg p-8 text-center">
+    <h2 class="text-2xl font-bold text-gray-900 mb-4">Can't find what you're looking for?</h2>
+    <p class="text-gray-600 mb-6">Browse all courses or use our search feature to find exactly what you need.</p>
+    <div class="space-x-4">
+      <%= link_to "Browse All Courses", courses_path, class: "inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition" %>
+      <%= link_to "Search Courses", courses_path(search: ""), class: "inline-block px-6 py-3 border border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition" %>
+    </div>
+  </div>
+</div>
