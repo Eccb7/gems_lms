@@ -1,0 +1,71 @@
+# PostgreSQL. Versions 9.3 and up are supported.
+#
+# Install the pg driver:
+#   gem install pg
+# On macOS with Homebrew:
+#   gem install pg -- --with-pg-config=/usr/local/bin/pg_config
+# On macOS with MacPorts:
+#   gem install pg -- --with-pg-config=/opt/local/lib/postgresql84/bin/pg_config
+# On Windows:
+#   gem install pg
+#       Choose the win32 build.
+#       Install PostgreSQL and put its /bin directory on your path.
+#
+# Configure Using Gemfile
+# gem "pg"
+#
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: gems_lms_development
+  username: gems_lms
+  password: <%= ENV["GEMS_LMS_DATABASE_PASSWORD"] %>
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *default
+  database: gems_lms_test
+  username: gems_lms
+  password: <%= ENV["GEMS_LMS_DATABASE_PASSWORD"] %>
+
+# As with config/credentials.yml, you never want to store sensitive information,
+# like your database password, in your source code. If your source code is
+# ever seen by anyone, they now have access to your database.
+#
+# Instead, provide the password or a full connection URL as an environment
+# variable when you boot the app. For example:
+#
+#   DATABASE_URL="postgres://myuser:mypass@localhost/somedatabase"
+#
+# If provided, a database URL will override any of the values above.
+#
+production:
+  primary:
+    <<: *default
+    database: gems_lms_production
+    username: gems_lms
+    password: <%= ENV["GEMS_LMS_DATABASE_PASSWORD"] %>
+  cache:
+    <<: *default
+    database: gems_lms_production_cache
+    username: gems_lms
+    password: <%= ENV["GEMS_LMS_DATABASE_PASSWORD"] %>
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *default
+    database: gems_lms_production_queue
+    username: gems_lms
+    password: <%= ENV["GEMS_LMS_DATABASE_PASSWORD"] %>
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *default
+    database: gems_lms_production_cable
+    username: gems_lms
+    password: <%= ENV["GEMS_LMS_DATABASE_PASSWORD"] %>
+    migrations_paths: db/cable_migrate
