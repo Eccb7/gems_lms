@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_08_083922) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_08_130244) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -182,6 +182,31 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_08_083922) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
+  create_table "payments", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "course_id", null: false
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.string "currency", default: "KES"
+    t.string "status", default: "pending"
+    t.string "payment_method", default: "mpesa"
+    t.text "description"
+    t.string "phone_number"
+    t.string "mpesa_receipt_number"
+    t.string "checkout_request_id"
+    t.string "merchant_request_id"
+    t.string "transaction_id"
+    t.datetime "transaction_date"
+    t.text "callback_response"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["checkout_request_id"], name: "index_payments_on_checkout_request_id"
+    t.index ["course_id"], name: "index_payments_on_course_id"
+    t.index ["mpesa_receipt_number"], name: "index_payments_on_mpesa_receipt_number"
+    t.index ["payment_method"], name: "index_payments_on_payment_method"
+    t.index ["status"], name: "index_payments_on_status"
+    t.index ["user_id"], name: "index_payments_on_user_id"
+  end
+
   create_table "quiz_attempts", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "quiz_id", null: false
@@ -277,6 +302,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_08_083922) do
   add_foreign_key "lesson_progresses", "users"
   add_foreign_key "lessons", "sections"
   add_foreign_key "notifications", "users"
+  add_foreign_key "payments", "courses"
+  add_foreign_key "payments", "users"
   add_foreign_key "quiz_attempts", "quizzes"
   add_foreign_key "quiz_attempts", "users"
   add_foreign_key "quiz_options", "quiz_questions"

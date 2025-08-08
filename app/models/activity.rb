@@ -17,20 +17,20 @@ class Activity < ApplicationRecord
 
   def icon
     case activity_type
-    when 'lesson_completed'
-      '✅'
-    when 'course_enrolled'
-      '📚'
-    when 'assignment_submitted'
-      '📝'
-    when 'quiz_completed'
-      '🧠'
-    when 'achievement_earned'
-      '🏆'
-    when 'course_completed'
-      '🎓'
+    when "lesson_completed"
+      "✅"
+    when "course_enrolled"
+      "📚"
+    when "assignment_submitted"
+      "📝"
+    when "quiz_completed"
+      "🧠"
+    when "achievement_earned"
+      "🏆"
+    when "course_completed"
+      "🎓"
     else
-      '📈'
+      "📈"
     end
   end
 end

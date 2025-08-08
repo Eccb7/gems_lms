@@ -51,11 +51,11 @@ class ApplicationController < ActionController::Base
 
     # Allow access to specific public pages
     public_actions = {
-      'pages' => ['landing', 'about', 'contact', 'privacy', 'terms'],
-      'courses' => ['index', 'show'],
-      'categories' => ['index', 'show'],
-      'rails/health' => ['show'],
-      'rails/pwa' => ['service_worker', 'manifest']
+      "pages" => [ "landing", "about", "contact", "privacy", "terms" ],
+      "courses" => [ "index", "show" ],
+      "categories" => [ "index", "show" ],
+      "rails/health" => [ "show" ],
+      "rails/pwa" => [ "service_worker", "manifest" ]
     }
 
     controller_name = params[:controller]

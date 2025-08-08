@@ -17,11 +17,11 @@ class HomeController < ApplicationController
 
   def redirect_based_on_role
     case current_user.role
-    when 'student'
+    when "student"
       redirect_to student_dashboard_path
-    when 'instructor'
+    when "instructor"
       redirect_to instructor_dashboard_path if defined?(instructor_dashboard_path)
-    when 'admin'
+    when "admin"
       redirect_to admin_dashboard_path if defined?(admin_dashboard_path)
     else
       redirect_to student_dashboard_path

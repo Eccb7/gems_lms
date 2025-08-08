@@ -7,14 +7,14 @@ class Api::V1::BaseController < ApplicationController
   protected
 
   def authenticate_api_user!
-    token = request.headers['Authorization']&.split(' ')&.last
+    token = request.headers["Authorization"]&.split(" ")&.last
     return render_unauthorized unless token
 
     decoded_token = decode_jwt_token(token)
     return render_unauthorized unless decoded_token
 
-    @current_user = User.find_by(id: decoded_token['user_id'])
-    return render_unauthorized unless @current_user&.active?
+    @current_user = User.find_by(id: decoded_token["user_id"])
+    render_unauthorized unless @current_user&.active?
   end
 
   def current_user
@@ -22,10 +22,10 @@ class Api::V1::BaseController < ApplicationController
   end
 
   def render_unauthorized
-    render json: { error: 'Unauthorized' }, status: :unauthorized
+    render json: { error: "Unauthorized" }, status: :unauthorized
   end
 
-  def render_not_found(resource = 'Resource')
+  def render_not_found(resource = "Resource")
     render json: { error: "#{resource} not found" }, status: :not_found
   end
 
@@ -36,7 +36,7 @@ class Api::V1::BaseController < ApplicationController
   private
 
   def decode_jwt_token(token)
-    JWT.decode(token, Rails.application.secret_key_base, true, algorithm: 'HS256')[0]
+    JWT.decode(token, Rails.application.secret_key_base, true, algorithm: "HS256")[0]
   rescue JWT::DecodeError
     nil
   end

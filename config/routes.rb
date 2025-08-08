@@ -34,11 +34,11 @@ Rails.application.routes.draw do
     end
 
     # Payment routes for courses
-    resources :payments, only: [:create]
+    resources :payments, only: [ :create ]
   end
 
   # Payment management routes
-  resources :payments, only: [:index, :show] do
+  resources :payments, only: [ :index, :show ] do
     member do
       get :mpesa_checkout
       get :check_payment_status

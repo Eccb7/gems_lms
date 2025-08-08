@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:landing, :about, :contact, :privacy, :terms]
+  skip_before_action :authenticate_user!, only: [ :landing, :about, :contact, :privacy, :terms ]
 
   def landing
     # Landing page for non-authenticated users

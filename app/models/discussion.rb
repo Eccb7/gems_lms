@@ -10,7 +10,7 @@ class Discussion < ApplicationRecord
   validates :content, presence: true, length: { minimum: 10 }
 
   scope :recent, -> { order(created_at: :desc) }
-  scope :popular, -> { joins(:discussion_votes).group(:id).order('COUNT(discussion_votes.id) DESC') }
+  scope :popular, -> { joins(:discussion_votes).group(:id).order("COUNT(discussion_votes.id) DESC") }
   scope :answered, -> { where(answered: true) }
   scope :unanswered, -> { where(answered: false) }
 

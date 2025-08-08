@@ -1,6 +1,6 @@
 class CoursePrerequisite < ApplicationRecord
   belongs_to :course
-  belongs_to :prerequisite_course, class_name: 'Course'
+  belongs_to :prerequisite_course, class_name: "Course"
 
   validates :course_id, uniqueness: { scope: :prerequisite_course_id }
   validate :no_circular_dependency

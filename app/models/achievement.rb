@@ -9,20 +9,20 @@ class Achievement < ApplicationRecord
 
   def icon
     case achievement_type
-    when 'first_course'
-      '🎯'
-    when 'course_completion'
-      '🏆'
-    when 'perfect_quiz'
-      '🌟'
-    when 'streak_week'
-      '🔥'
-    when 'streak_month'
-      '💎'
-    when 'assignment_ace'
-      '📝'
+    when "first_course"
+      "🎯"
+    when "course_completion"
+      "🏆"
+    when "perfect_quiz"
+      "🌟"
+    when "streak_week"
+      "🔥"
+    when "streak_month"
+      "💎"
+    when "assignment_ace"
+      "📝"
     else
-      '🏅'
+      "🏅"
     end
   end
 end

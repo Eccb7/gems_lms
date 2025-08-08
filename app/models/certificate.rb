@@ -12,7 +12,7 @@ class Certificate < ApplicationRecord
   scope :by_course, ->(course) { where(course: course) }
 
   def certificate_url
-    Rails.application.routes.url_helpers.certificate_url(self, host: ENV['APP_HOST'] || 'localhost:3000')
+    Rails.application.routes.url_helpers.certificate_url(self, host: ENV["APP_HOST"] || "localhost:3000")
   end
 
   def to_pdf

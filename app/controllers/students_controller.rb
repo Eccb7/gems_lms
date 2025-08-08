@@ -19,7 +19,7 @@ class StudentsController < ApplicationController
   def calculate_progress_stats
     {
       total_courses: @enrolled_courses.count,
-      completed_courses: @enrolled_courses.joins(:course).where(courses: { status: 'completed' }).count,
+      completed_courses: @enrolled_courses.joins(:course).where(courses: { status: "completed" }).count,
       total_lessons: current_user.lessons.count,
       completed_lessons: current_user.lesson_completions.count,
       total_points: current_user.total_points || 0,

@@ -1,17 +1,17 @@
 class PaymentsController < ApplicationController
-  before_action :authenticate_user!, except: [:mpesa_callback]
-  skip_before_action :verify_authenticity_token, only: [:mpesa_callback]
-  before_action :set_course, only: [:create, :mpesa_checkout]
+  before_action :authenticate_user!, except: [ :mpesa_callback ]
+  skip_before_action :verify_authenticity_token, only: [ :mpesa_callback ]
+  before_action :set_course, only: [ :create, :mpesa_checkout ]
 
   def create
     @payment = current_user.payments.build(payment_params)
     @payment.course = @course
-    @payment.currency = 'KES'
+    @payment.currency = "KES"
     @payment.transaction_id = generate_transaction_id
 
     if @payment.save
       case @payment.payment_method
-      when 'mpesa'
+      when "mpesa"
         redirect_to mpesa_checkout_payment_path(@payment)
       else
         redirect_to @course, alert: "Payment method not supported yet."
@@ -65,19 +65,19 @@ class PaymentsController < ApplicationController
         case result[:result_code].to_i
         when 0
           @payment.update!(status: :completed)
-          render json: { status: 'completed', message: 'Payment successful!' }
+          render json: { status: "completed", message: "Payment successful!" }
         when 1032
           @payment.update!(status: :timeout)
-          render json: { status: 'timeout', message: 'Payment timed out. Please try again.' }
+          render json: { status: "timeout", message: "Payment timed out. Please try again." }
         else
           @payment.update!(status: :failed)
-          render json: { status: 'failed', message: result[:result_desc] }
+          render json: { status: "failed", message: result[:result_desc] }
         end
       else
-        render json: { status: 'error', message: 'Unable to check payment status' }
+        render json: { status: "error", message: "Unable to check payment status" }
       end
     else
-      render json: { status: 'error', message: 'Invalid payment request' }
+      render json: { status: "error", message: "Invalid payment request" }
     end
   end
 

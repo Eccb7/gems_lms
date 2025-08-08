@@ -1,6 +1,6 @@
 class Message < ApplicationRecord
-  belongs_to :sender, class_name: 'User'
-  belongs_to :recipient, class_name: 'User'
+  belongs_to :sender, class_name: "User"
+  belongs_to :recipient, class_name: "User"
   belongs_to :course, optional: true
 
   validates :content, presence: true, length: { maximum: 1000 }
@@ -32,7 +32,7 @@ class Message < ApplicationRecord
       id: id,
       content: content,
       sender: sender.display_name,
-      created_at: created_at.strftime('%H:%M')
+      created_at: created_at.strftime("%H:%M")
     })
   end
 end

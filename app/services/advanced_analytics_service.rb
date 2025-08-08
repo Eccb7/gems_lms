@@ -18,7 +18,7 @@ class AdvancedAnalyticsService
 
     {
       total_courses: courses.count,
-      total_students: courses.joins(:enrollments).distinct.count('enrollments.user_id'),
+      total_students: courses.joins(:enrollments).distinct.count("enrollments.user_id"),
       average_course_rating: calculate_average_rating(courses),
       revenue: calculate_instructor_revenue(instructor, start_date, end_date),
       student_satisfaction: calculate_student_satisfaction(instructor),
@@ -52,8 +52,8 @@ class AdvancedAnalyticsService
       revenue: calculate_platform_revenue(start_date, end_date),
       popular_courses: Course.joins(:enrollments)
                             .where(enrollments: { created_at: start_date..end_date })
-                            .group('courses.id')
-                            .order('COUNT(enrollments.id) DESC')
+                            .group("courses.id")
+                            .order("COUNT(enrollments.id) DESC")
                             .limit(10),
       user_retention: calculate_user_retention(start_date, end_date),
       peak_usage_times: analyze_peak_usage_times(start_date, end_date)
@@ -154,7 +154,7 @@ class AdvancedAnalyticsService
   def self.analyze_subject_preferences(student)
     student.enrollments
            .joins(course: :category)
-           .group('categories.name')
+           .group("categories.name")
            .count
   end
 
@@ -162,7 +162,7 @@ class AdvancedAnalyticsService
     # Get assignments and quizzes due in the next 7 days
     student.assignments
            .joins(:lesson)
-           .where('assignments.due_date BETWEEN ? AND ?', Date.current, 7.days.from_now)
+           .where("assignments.due_date BETWEEN ? AND ?", Date.current, 7.days.from_now)
            .limit(5)
   end
 
@@ -185,7 +185,7 @@ class AdvancedAnalyticsService
     attempts = quiz.quiz_attempts.where(created_at: start_date..end_date)
     return 0 if attempts.count.zero?
 
-    passed = attempts.where('score >= ?', quiz.passing_score).count
+    passed = attempts.where("score >= ?", quiz.passing_score).count
     (passed.to_f / attempts.count * 100).round(2)
   end
 end

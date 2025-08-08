@@ -19,7 +19,7 @@ class Payment < ApplicationRecord
 
   def refund!
     case payment_method
-    when 'mpesa'
+    when "mpesa"
       # M-Pesa refunds need to be handled through Safaricom portal
       # For now, mark as refunded and handle manually
       update!(status: :refunded, refunded_at: Time.current)
@@ -33,8 +33,8 @@ class Payment < ApplicationRecord
   def formatted_phone_number
     return unless phone_number
     # Convert to international format if needed
-    phone = phone_number.gsub(/\D/, '') # Remove non-digits
-    phone = "254#{phone[1..-1]}" if phone.start_with?('0') # Convert 07xx to 254xxx
+    phone = phone_number.gsub(/\D/, "") # Remove non-digits
+    phone = "254#{phone[1..-1]}" if phone.start_with?("0") # Convert 07xx to 254xxx
     phone
   end
 

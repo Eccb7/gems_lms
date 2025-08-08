@@ -11,8 +11,8 @@ class Coupon < ApplicationRecord
   enum discount_type: { percentage: 0, fixed_amount: 1 }
 
   scope :active, -> { where(active: true) }
-  scope :valid_now, -> { where('valid_from <= ? AND valid_until >= ?', Time.current, Time.current) }
-  scope :not_expired, -> { where('valid_until >= ?', Time.current) }
+  scope :valid_now, -> { where("valid_from <= ? AND valid_until >= ?", Time.current, Time.current) }
+  scope :not_expired, -> { where("valid_until >= ?", Time.current) }
 
   def valid_for_use?
     active? && valid_now? && !usage_limit_reached?
@@ -29,10 +29,10 @@ class Coupon < ApplicationRecord
 
   def calculate_discount(amount)
     case discount_type
-    when 'percentage'
+    when "percentage"
       (amount * discount_value / 100).round(2)
-    when 'fixed_amount'
-      [discount_value, amount].min
+    when "fixed_amount"
+      [ discount_value, amount ].min
     end
   end
 
