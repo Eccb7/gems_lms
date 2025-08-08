@@ -280,6 +280,32 @@ User.all.each do |user|
   end
 end
 
+# Create sample payments for demonstration
+puts "Creating sample payments..."
+students.first(3).each do |student|
+  paid_courses = created_courses.select { |c| c.price > 0 }.sample(2)
+  paid_courses.each do |course|
+    status = [ 'completed', 'pending', 'failed' ].sample
+    payment = student.payments.create!(
+      course: course,
+      amount: course.price,
+      currency: 'KES',
+      payment_method: 'mpesa',
+      phone_number: "25470#{rand(1000000..9999999)}",
+      transaction_id: "GEMS_#{Time.current.strftime('%Y%m%d_%H%M%S')}_#{SecureRandom.hex(4)}",
+      status: status,
+      mpesa_receipt_number: status == 'completed' ? "#{rand(100000000..999999999)}" : nil,
+      completed_at: status == 'completed' ? rand(7.days).seconds.ago : nil,
+      created_at: rand(30.days).seconds.ago
+    )
+
+    # Enroll student if payment completed
+    if payment.status == 'completed'
+      course.enrollments.create!(user: student, enrolled_at: payment.completed_at)
+    end
+  end
+end
+
 puts "Seed data creation completed!"
 puts "Created:"
 puts "- #{Category.count} categories"
