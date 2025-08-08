@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  description: MyText
+  lesson: one
+  due_date: 2025-08-08 10:46:56
+  max_points: 9.99
+  submission_format: 1
+
+two:
+  title: MyString
+  description: MyText
+  lesson: two
+  due_date: 2025-08-08 10:46:56
+  max_points: 9.99
+  submission_format: 1

@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  assignment: one
+  content: MyText
+  submitted_at: 2025-08-08 10:47:23
+  grade: 9.99
+  feedback: MyText
+  status: 1
+
+two:
+  user: two
+  assignment: two
+  content: MyText
+  submitted_at: 2025-08-08 10:47:23
+  grade: 9.99
+  feedback: MyText
+  status: 1
