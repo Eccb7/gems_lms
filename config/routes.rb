@@ -1,15 +1,125 @@
 Rails.application.routes.draw do
   devise_for :users
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  root "home#index"
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Health check endpoint
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  # PWA manifest and service worker
+  get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  # Public course browsing
+  resources :courses, only: [ :index, :show ] do
+    member do
+      post :enroll
+      delete :leave
+    end
+  end
+
+  resources :categories, only: [ :index, :show ]
+
+  # Student namespace
+  namespace :student do
+    get "dashboard", to: "dashboard#index"
+    resources :courses, only: [ :index, :show ] do
+      resources :lessons, only: [ :show ] do
+        member do
+          post :complete
+        end
+        resources :quizzes, only: [ :show ] do
+          resources :quiz_attempts, only: [ :create, :show, :update ] do
+            member do
+              post :submit
+            end
+          end
+        end
+        resources :assignments, only: [ :show ] do
+          resources :assignment_submissions, except: [ :index, :destroy ]
+        end
+      end
+    end
+    resources :notifications, only: [ :index, :show, :update ] do
+      collection do
+        post :mark_all_as_read
+      end
+    end
+  end
+
+  # Instructor namespace
+  namespace :instructor do
+    get "dashboard", to: "dashboard#index"
+    resources :courses do
+      member do
+        patch :publish
+        get :analytics
+      end
+      resources :sections do
+        resources :lessons do
+          resources :quizzes do
+            resources :quiz_questions do
+              resources :quiz_options, except: [ :show ]
+            end
+          end
+          resources :assignments
+        end
+      end
+      resources :enrollments, only: [ :index, :show ]
+      resources :assignment_submissions, only: [ :index, :show, :update ] do
+        member do
+          patch :grade
+          patch :return_for_revision
+        end
+      end
+    end
+    resources :notifications, only: [ :index, :show ]
+  end
+
+  # Admin namespace
+  namespace :admin do
+    get "dashboard", to: "dashboard#index"
+    get "analytics", to: "dashboard#analytics"
+
+    resources :users do
+      member do
+        patch :activate
+        patch :deactivate
+        patch :change_role
+      end
+    end
+
+    resources :courses do
+      member do
+        patch :approve
+        patch :reject
+        patch :archive
+      end
+    end
+
+    resources :categories
+
+    resources :notifications, only: [ :index, :new, :create, :show, :destroy ] do
+      collection do
+        post :send_announcement
+      end
+    end
+
+    resources :reports, only: [ :index ] do
+      collection do
+        get :users
+        get :courses
+        get :enrollments
+        get :revenue
+      end
+    end
+  end
+
+  # API namespace for future mobile app or integrations
+  namespace :api do
+    namespace :v1 do
+      resources :courses, only: [ :index, :show ]
+      resources :lessons, only: [ :show ]
+      # Add more API endpoints as needed
+    end
+  end
 end
