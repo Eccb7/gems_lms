@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   # Enums for roles
-  enum role: { student: 0, instructor: 1, admin: 2 }
+  enum :role, { student: 0, instructor: 1, admin: 2 }
 
   # Active Storage attachments
   has_one_attached :avatar
@@ -13,7 +13,7 @@ class User < ApplicationRecord
   # Associations
   has_many :enrollments, dependent: :destroy
   has_many :enrolled_courses, through: :enrollments, source: :course
-  has_many :created_courses, class_name: 'Course', foreign_key: 'instructor_id', dependent: :destroy
+  has_many :created_courses, class_name: "Course", foreign_key: "instructor_id", dependent: :destroy
   has_many :quiz_attempts, dependent: :destroy
   has_many :assignment_submissions, dependent: :destroy
   has_many :notifications, dependent: :destroy
@@ -47,7 +47,7 @@ class User < ApplicationRecord
 
   def age
     return nil unless date_of_birth
-    
+
     ((Time.zone.now - date_of_birth.to_time) / 1.year.seconds).floor
   end
 
@@ -85,12 +85,12 @@ class User < ApplicationRecord
   def avatar_format
     return unless avatar.attached?
 
-    unless avatar.content_type.in?(['image/jpeg', 'image/png', 'image/gif'])
-      errors.add(:avatar, 'must be a JPEG, PNG, or GIF image')
+    unless avatar.content_type.in?([ "image/jpeg", "image/png", "image/gif" ])
+      errors.add(:avatar, "must be a JPEG, PNG, or GIF image")
     end
 
     if avatar.byte_size > 5.megabytes
-      errors.add(:avatar, 'must be less than 5MB')
+      errors.add(:avatar, "must be less than 5MB")
     end
   end
 end
