@@ -19,6 +19,9 @@ class User < ApplicationRecord
   has_many :notifications, dependent: :destroy
   has_many :course_progresses, dependent: :destroy
   has_many :lesson_progresses, dependent: :destroy
+  has_many :activities, dependent: :destroy
+  has_many :achievements, dependent: :destroy
+  has_many :lesson_completions, dependent: :destroy
 
   # Validations
   validates :first_name, presence: true
@@ -74,6 +77,42 @@ class User < ApplicationRecord
 
   def activate!
     update!(active: true)
+  end
+
+  # Dashboard helper methods
+  def total_points
+    achievements.sum(:points) || 0
+  end
+
+  def current_streak
+    # Calculate current learning streak based on lesson completions
+    return 0 unless lesson_completions.any?
+
+    streak = 0
+    current_date = Date.current
+
+    while lesson_completions.where(created_at: current_date.beginning_of_day..current_date.end_of_day).exists?
+      streak += 1
+      current_date -= 1.day
+    end
+
+    streak
+  end
+
+  def lessons
+    # Get all lessons from enrolled courses
+    Lesson.joins(:course).joins("INNER JOIN enrollments ON enrollments.course_id = courses.id")
+          .where(enrollments: { user_id: id })
+  end
+
+  def assignments
+    # Get all assignments from enrolled courses with upcoming deadlines
+    Assignment.joins(:course).joins("INNER JOIN enrollments ON enrollments.course_id = courses.id")
+              .where(enrollments: { user_id: id })
+  end
+
+  def name
+    full_name
   end
 
   private
