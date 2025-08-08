@@ -1,0 +1,103 @@
+<% content_for :title, "Sign In - GEMS LMS" %>
+
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <!-- Header -->
+    <div class="text-center">
+      <%= link_to root_path, class: "flex justify-center items-center space-x-2 mb-6" do %>
+        <span class="text-3xl font-bold text-blue-600">GEMS</span>
+        <span class="text-lg text-gray-600">LMS</span>
+      <% end %>
+      <h2 class="text-3xl font-bold text-gray-900">Welcome back</h2>
+      <p class="mt-2 text-gray-600">Sign in to your account to continue learning</p>
+    </div>
+
+    <!-- Sign In Form -->
+    <div class="bg-white rounded-lg shadow-lg p-8">
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), local: true, class: "space-y-6") do |f| %>
+        <!-- Email Field -->
+        <div>
+          <%= f.label :email, class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email",
+                            class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200",
+                            placeholder: "Enter your email address" %>
+        </div>
+
+        <!-- Password Field -->
+        <div>
+          <%= f.label :password, class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.password_field :password, autocomplete: "current-password",
+                               class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200",
+                               placeholder: "Enter your password" %>
+        </div>
+
+        <!-- Remember Me & Forgot Password -->
+        <div class="flex items-center justify-between">
+          <% if devise_mapping.rememberable? %>
+            <div class="flex items-center">
+              <%= f.check_box :remember_me, class: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" %>
+              <%= f.label :remember_me, "Remember me", class: "ml-2 block text-sm text-gray-700" %>
+            </div>
+          <% end %>
+
+          <% if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+            <%= link_to "Forgot password?", new_password_path(resource_name), 
+                       class: "text-sm text-blue-600 hover:text-blue-800 font-medium" %>
+          <% end %>
+        </div>
+
+        <!-- Submit Button -->
+        <div>
+          <%= f.submit "Sign In", 
+                      class: "w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition duration-200 transform hover:scale-[1.02]" %>
+        </div>
+      <% end %>
+
+      <!-- Divider -->
+      <div class="relative my-6">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-gray-300"></div>
+        </div>
+        <div class="relative flex justify-center text-sm">
+          <span class="px-2 bg-white text-gray-500">Or</span>
+        </div>
+      </div>
+
+      <!-- Sign Up Link -->
+      <div class="text-center">
+        <% if devise_mapping.registerable? && controller_name != 'registrations' %>
+          <p class="text-gray-600">
+            Don't have an account?
+            <%= link_to "Sign up", new_registration_path(resource_name), 
+                       class: "text-blue-600 hover:text-blue-800 font-semibold ml-1" %>
+          </p>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="text-center text-sm text-gray-600">
+      <p>Join thousands of learners on GEMS LMS</p>
+      <div class="flex justify-center items-center space-x-6 mt-4">
+        <div class="flex items-center">
+          <svg class="w-4 h-4 mr-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+          <span>Expert instructors</span>
+        </div>
+        <div class="flex items-center">
+          <svg class="w-4 h-4 mr-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+          <span>Lifetime access</span>
+        </div>
+        <div class="flex items-center">
+          <svg class="w-4 h-4 mr-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+          <span>Mobile learning</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
