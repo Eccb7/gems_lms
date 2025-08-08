@@ -1,0 +1,215 @@
+<% content_for :title, "Browse Courses - GEMS LMS" %>
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Browse Courses</h1>
+    <p class="text-gray-600 mt-2">Discover amazing courses from expert instructors</p>
+  </div>
+
+  <!-- Search and Filters -->
+  <div class="bg-white rounded-lg shadow p-6 mb-8">
+    <%= form_with url: courses_path, method: :get, local: true, class: "space-y-4" do |form| %>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- Search -->
+        <div class="md:col-span-2">
+          <%= form.text_field :search, placeholder: "Search courses...", 
+                              value: params[:search],
+                              class: "w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" %>
+        </div>
+        
+        <!-- Category Filter -->
+        <div>
+          <%= form.select :category_id, 
+                          options_from_collection_for_select(@categories, :id, :name, params[:category_id]),
+                          { prompt: "All Categories" },
+                          { class: "w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" } %>
+        </div>
+        
+        <!-- Sort -->
+        <div>
+          <%= form.select :sort, 
+                          options_for_select([
+                            ['Latest', 'newest'],
+                            ['Popular', 'popular'],
+                            ['Price: Low to High', 'price_low'],
+                            ['Price: High to Low', 'price_high']
+                          ], params[:sort]),
+                          { prompt: "Sort by" },
+                          { class: "w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" } %>
+        </div>
+      </div>
+      
+      <div class="flex justify-between items-center">
+        <div class="flex space-x-4">
+          <!-- Price Filter -->
+          <label class="flex items-center">
+            <%= form.radio_button :price_filter, "free", checked: params[:price_filter] == "free" %>
+            <span class="ml-2 text-sm text-gray-700">Free courses only</span>
+          </label>
+        </div>
+        
+        <div class="flex space-x-2">
+          <%= form.submit "Search", class: "px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" %>
+          <%= link_to "Clear", courses_path, class: "px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Results Summary -->
+  <div class="flex justify-between items-center mb-6">
+    <p class="text-gray-600">
+      <% if params[:search].present? || params[:category_id].present? %>
+        Showing <%= @courses.respond_to?(:total_count) ? @courses.count : @courses.count %> results
+        <% if params[:search].present? %>
+          for "<%= params[:search] %>"
+        <% end %>
+        <% if params[:category_id].present? %>
+          in <%= @categories.find { |c| c.id.to_s == params[:category_id] }&.name %>
+        <% end %>
+      <% else %>
+        Showing all <%= @courses.respond_to?(:total_count) ? @courses.total_count : @courses.count %> courses
+      <% end %>
+    </p>
+    
+    <div class="flex items-center space-x-2">
+      <span class="text-sm text-gray-500">View:</span>
+      <button class="p-2 text-gray-400 hover:text-gray-600">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+        </svg>
+      </button>
+      <button class="p-2 text-blue-600">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Courses Grid -->
+  <% if @courses.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+      <% @courses.each do |course| %>
+        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
+          <!-- Course Image/Thumbnail -->
+          <div class="h-48 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+            <span class="text-white text-2xl font-semibold"><%= course.title.first(2).upcase %></span>
+          </div>
+          
+          <div class="p-6">
+            <!-- Category Badge -->
+            <div class="flex items-center justify-between mb-3">
+              <span class="inline-block px-3 py-1 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full">
+                <%= course.category.name %>
+              </span>
+              <span class="text-sm text-gray-500">
+                <%= course.difficulty_level.humanize %>
+              </span>
+            </div>
+            
+            <!-- Course Title -->
+            <h3 class="text-xl font-semibold text-gray-900 mb-2 line-clamp-2">
+              <%= link_to course.title, course_path(course), class: "hover:text-blue-600" %>
+            </h3>
+            
+            <!-- Course Description -->
+            <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+              <%= truncate(course.description, length: 120) %>
+            </p>
+            
+            <!-- Instructor -->
+            <div class="flex items-center mb-4">
+              <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center mr-3">
+                <span class="text-xs font-medium text-gray-600">
+                  <%= course.instructor.display_name.first(2).upcase %>
+                </span>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-900"><%= course.instructor.display_name %></p>
+                <p class="text-xs text-gray-500">Instructor</p>
+              </div>
+            </div>
+            
+            <!-- Course Stats -->
+            <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+              <div class="flex items-center space-x-4">
+                <span class="flex items-center">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                  </svg>
+                  <%= course.enrollments.count %>
+                </span>
+                <span class="flex items-center">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  <%= course.sections.joins(:lessons).count %> lessons
+                </span>
+              </div>
+              <div class="flex items-center">
+                <span class="text-yellow-500 mr-1">★</span>
+                <span>4.8</span>
+              </div>
+            </div>
+            
+            <!-- Price and CTA -->
+            <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+              <div class="text-lg font-semibold">
+                <% if course.price > 0 %>
+                  <span class="text-green-600">$<%= course.price %></span>
+                <% else %>
+                  <span class="text-green-600">Free</span>
+                <% end %>
+              </div>
+              
+              <div class="flex space-x-2">
+                <%= link_to "Preview", course_path(course), 
+                           class: "px-3 py-2 text-sm text-blue-600 border border-blue-600 rounded-md hover:bg-blue-50" %>
+                
+                <% if user_signed_in? && current_user.student? %>
+                  <% if current_user.enrolled_in?(course) %>
+                    <%= link_to "Continue", course_path(course), 
+                               class: "px-3 py-2 text-sm bg-green-600 text-white rounded-md hover:bg-green-700" %>
+                  <% else %>
+                    <%= link_to "Enroll", enroll_course_path(course), method: :post,
+                               class: "px-3 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700" %>
+                  <% end %>
+                <% else %>
+                  <%= link_to "View Course", course_path(course), 
+                             class: "px-3 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700" %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Pagination -->
+    <% if @courses.respond_to?(:current_page) %>
+      <div class="flex justify-center">
+        <%= paginate @courses %>
+      </div>
+    <% end %>
+  <% else %>
+    <!-- No Results -->
+    <div class="text-center py-12">
+      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900">No courses found</h3>
+      <p class="mt-1 text-sm text-gray-500">
+        <% if params[:search].present? || params[:category].present? %>
+          Try adjusting your search criteria or filters.
+        <% else %>
+          No courses available at the moment.
+        <% end %>
+      </p>
+      <div class="mt-6">
+        <%= link_to "Clear Filters", courses_path, class: "inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700" %>
+      </div>
+    </div>
+  <% end %>
+</div>
