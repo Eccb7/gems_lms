@@ -1,0 +1,100 @@
+#!/bin/bash
+
+# GEMS LMS Quick Setup Script
+# This script helps you get started with GEMS LMS quickly
+
+set -e
+
+echo "🎓 Welcome to GEMS LMS Setup!"
+echo "================================"
+echo ""
+
+# Check if required tools are installed
+check_dependency() {
+    if ! command -v $1 &> /dev/null; then
+        echo "❌ $1 is not installed. Please install $1 and try again."
+        exit 1
+    else
+        echo "✅ $1 is installed"
+    fi
+}
+
+echo "Checking dependencies..."
+check_dependency "ruby"
+check_dependency "bundle"
+check_dependency "rails"
+check_dependency "node"
+check_dependency "npm"
+
+# Check Ruby version
+RUBY_VERSION=$(ruby -v | cut -d' ' -f2)
+echo "✅ Ruby version: $RUBY_VERSION"
+
+# Check Rails version
+RAILS_VERSION=$(rails -v | cut -d' ' -f2)
+echo "✅ Rails version: $RAILS_VERSION"
+
+echo ""
+echo "📦 Installing dependencies..."
+
+# Install Ruby gems
+echo "Installing Ruby gems..."
+bundle install
+
+# Install Node packages
+if [ -f "package.json" ]; then
+    echo "Installing Node packages..."
+    npm install
+fi
+
+echo ""
+echo "🗄️ Setting up database..."
+
+# Check if .env file exists
+if [ ! -f ".env" ]; then
+    echo "Creating .env file from template..."
+    cp .env.example .env
+    echo "⚠️  Please update .env file with your database credentials"
+fi
+
+# Setup database
+echo "Creating database..."
+rails db:create
+
+echo "Running migrations..."
+rails db:migrate
+
+echo "Seeding database with sample data..."
+rails db:seed
+
+echo ""
+echo "🎉 Setup complete!"
+echo "================================"
+echo ""
+echo "🚀 To start the application:"
+echo ""
+echo "1. Start the Rails server:"
+echo "   rails server"
+echo ""
+echo "2. In a new terminal, start Sidekiq for background jobs:"
+echo "   bundle exec sidekiq"
+echo ""
+echo "3. Visit: http://localhost:3000"
+echo ""
+echo "📧 Default login credentials:"
+echo "   Admin: admin@gems.com / password"
+echo "   Instructor: instructor1@gems.com / password"
+echo "   Student: student1@gems.com / password"
+echo ""
+echo "📚 Documentation:"
+echo "   README: README.md"
+echo "   Contributing: CONTRIBUTING.md"
+echo ""
+echo "🛠️ Useful commands:"
+echo "   rails test          - Run tests"
+echo "   rails console       - Rails console"
+echo "   rails db:reset      - Reset database"
+echo "   rubocop             - Check code style"
+echo "   brakeman            - Security scan"
+echo ""
+echo "Happy learning! 🎓"
