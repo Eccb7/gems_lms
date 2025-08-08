@@ -1,0 +1,412 @@
+<% content_for :title, "Student Dashboard - Gems of Insight" %>
+
+<!-- SVG Gradients for Progress Rings -->
+<svg class="sr-only" width="0" height="0">
+  <defs>
+    <linearGradient id="gemGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0F52BA"/>
+      <stop offset="50%" style="stop-color:#3B82F6"/>
+      <stop offset="100%" style="stop-color:#FFD700"/>
+    </linearGradient>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700"/>
+      <stop offset="100%" style="stop-color:#F59E0B"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- Welcome Header -->
+<div class="bg-gradient-to-br from-blue-50 via-white to-amber-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 border-b border-gray-200 dark:border-gray-700">
+  <div class="container-gem py-8">
+    <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+      <div class="flex-1">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="animate-gem-pulse">
+            <div class="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center">
+              <span class="text-2xl">💎</span>
+            </div>
+          </div>
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+              Welcome back, <span class="text-gradient-primary"><%= current_user.name %></span>!
+            </h1>
+            <p class="text-gray-600 dark:text-gray-300 text-lg">
+              Ready to discover new gems of knowledge today?
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Quick Stats -->
+      <div class="flex flex-wrap gap-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-gray-700">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">🔥</span>
+            <div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Streak</p>
+              <p class="text-xl font-bold text-gradient-gold"><%= @progress_stats[:current_streak] %> days</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-lg border border-gray-100 dark:border-gray-700">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">⭐</span>
+            <div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Total Points</p>
+              <p class="text-xl font-bold text-gradient-primary"><%= @progress_stats[:total_points] %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Dashboard Content -->
+<div class="container-gem py-8">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <!-- Left Column - Progress & Course Cards -->
+    <div class="lg:col-span-2 space-y-8">
+      
+      <!-- Progress Overview -->
+      <section class="gem-card p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            <span class="text-2xl">📊</span>
+            Your Progress
+          </h2>
+          <button class="btn-outline text-sm py-2 px-4">
+            View Details
+          </button>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Courses Progress -->
+          <div class="text-center">
+            <div class="progress-ring mx-auto mb-4">
+              <svg width="120" height="120" class="transform -rotate-90">
+                <circle cx="60" cy="60" r="54" class="progress-ring__background"/>
+                <circle 
+                  cx="60" 
+                  cy="60" 
+                  r="54"
+                  class="progress-ring__progress"
+                  stroke-dasharray="<%= (@progress_stats[:completed_courses].to_f / [@progress_stats[:total_courses], 1].max * 339.292).round(2) %> 339.292"
+                />
+              </svg>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-gradient-primary">
+                    <%= (@progress_stats[:completed_courses].to_f / [@progress_stats[:total_courses], 1].max * 100).round %>%
+                  </div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400">Courses</div>
+                </div>
+              </div>
+            </div>
+            <p class="font-semibold text-gray-700 dark:text-gray-300">
+              <%= @progress_stats[:completed_courses] %> of <%= @progress_stats[:total_courses] %> Completed
+            </p>
+          </div>
+          
+          <!-- Lessons Progress -->
+          <div class="text-center">
+            <div class="progress-ring mx-auto mb-4">
+              <svg width="120" height="120" class="transform -rotate-90">
+                <circle cx="60" cy="60" r="54" class="progress-ring__background"/>
+                <circle 
+                  cx="60" 
+                  cy="60" 
+                  r="54"
+                  class="progress-ring__progress"
+                  stroke-dasharray="<%= (@progress_stats[:completed_lessons].to_f / [@progress_stats[:total_lessons], 1].max * 339.292).round(2) %> 339.292"
+                />
+              </svg>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-gradient-primary">
+                    <%= (@progress_stats[:completed_lessons].to_f / [@progress_stats[:total_lessons], 1].max * 100).round %>%
+                  </div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400">Lessons</div>
+                </div>
+              </div>
+            </div>
+            <p class="font-semibold text-gray-700 dark:text-gray-300">
+              <%= @progress_stats[:completed_lessons] %> of <%= @progress_stats[:total_lessons] %> Completed
+            </p>
+          </div>
+          
+          <!-- Achievements -->
+          <div class="text-center">
+            <div class="w-24 h-24 mx-auto mb-4 bg-gradient-gold rounded-full flex items-center justify-center animate-gold-glow">
+              <span class="text-4xl">🏆</span>
+            </div>
+            <p class="font-semibold text-gray-700 dark:text-gray-300">
+              <%= @achievements.count %> Recent Achievements
+            </p>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Current Courses -->
+      <section>
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            <span class="text-2xl">📚</span>
+            My Courses
+          </h2>
+          <a href="/courses" class="btn-primary">
+            Browse Courses
+          </a>
+        </div>
+        
+        <% if @enrolled_courses.any? %>
+          <div class="grid gap-6">
+            <% @enrolled_courses.limit(3).each do |enrollment| %>
+              <% course = enrollment.course %>
+              <div class="gem-card p-6 hover:scale-[1.02] transition-transform">
+                <div class="flex flex-col md:flex-row gap-6">
+                  <div class="md:w-32 h-24 bg-gradient-gem rounded-xl flex items-center justify-center flex-shrink-0">
+                    <span class="text-3xl"><%= course.emoji || "📖" %></span>
+                  </div>
+                  
+                  <div class="flex-1">
+                    <div class="flex items-start justify-between mb-2">
+                      <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+                        <%= course.title %>
+                      </h3>
+                      <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                        <%= enrollment.progress_percentage.round %>% Complete
+                      </span>
+                    </div>
+                    
+                    <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-2">
+                      <%= course.description %>
+                    </p>
+                    
+                    <!-- Progress Bar -->
+                    <div class="mb-4">
+                      <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                        <div 
+                          class="h-3 bg-gradient-primary rounded-full transition-all duration-300"
+                          style="width: <%= enrollment.progress_percentage %>%"
+                        ></div>
+                      </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                        <span class="flex items-center gap-1">
+                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                          </svg>
+                          <%= course.lessons.count %> lessons
+                        </span>
+                        <span class="flex items-center gap-1">
+                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                          </svg>
+                          <%= course.estimated_duration || "Self-paced" %>
+                        </span>
+                      </div>
+                      
+                      <a href="/courses/<%= course.id %>" class="btn-outline text-sm py-2 px-4">
+                        Continue Learning
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          
+          <% if @enrolled_courses.count > 3 %>
+            <div class="text-center mt-6">
+              <a href="/my-courses" class="btn-outline">
+                View All My Courses (<%= @enrolled_courses.count %>)
+              </a>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="gem-card p-12 text-center">
+            <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
+              <span class="text-4xl">📚</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              No Courses Yet
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">
+              Start your learning journey by enrolling in your first course!
+            </p>
+            <a href="/courses" class="btn-primary">
+              Explore Courses
+            </a>
+          </div>
+        <% end %>
+      </section>
+    </div>
+    
+    <!-- Right Column - Activity & Quick Actions -->
+    <div class="space-y-8">
+      
+      <!-- Quick Actions -->
+      <section class="gem-card p-6">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <span class="text-lg">⚡</span>
+          Quick Actions
+        </h3>
+        
+        <div class="space-y-3">
+          <a href="/courses" class="w-full btn-primary justify-center">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Browse Courses
+          </a>
+          
+          <a href="/assignments" class="w-full btn-outline justify-center">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+            </svg>
+            View Assignments
+          </a>
+          
+          <a href="/progress" class="w-full btn-outline justify-center">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+            </svg>
+            View Progress
+          </a>
+        </div>
+      </section>
+      
+      <!-- Upcoming Deadlines -->
+      <section class="gem-card p-6">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <span class="text-lg">⏰</span>
+          Upcoming Deadlines
+        </h3>
+        
+        <% if @upcoming_deadlines.any? %>
+          <div class="space-y-3">
+            <% @upcoming_deadlines.each do |assignment| %>
+              <div class="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                <div class="flex items-start justify-between">
+                  <div>
+                    <h4 class="font-semibold text-gray-900 dark:text-white text-sm">
+                      <%= assignment.title %>
+                    </h4>
+                    <p class="text-xs text-gray-600 dark:text-gray-400">
+                      <%= assignment.course.title %>
+                    </p>
+                  </div>
+                  <span class="text-xs text-red-600 dark:text-red-400 font-medium">
+                    <%= time_ago_in_words(assignment.due_date) %> left
+                  </span>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="text-center py-6">
+            <span class="text-4xl mb-2 block">✅</span>
+            <p class="text-gray-600 dark:text-gray-400 text-sm">
+              No upcoming deadlines. You're all caught up!
+            </p>
+          </div>
+        <% end %>
+      </section>
+      
+      <!-- Recent Achievements -->
+      <section class="gem-card premium p-6">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <span class="text-lg">🏆</span>
+          Recent Achievements
+        </h3>
+        
+        <% if @achievements.any? %>
+          <div class="space-y-3">
+            <% @achievements.each do |achievement| %>
+              <div class="flex items-center gap-3 p-3 bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                <div class="w-10 h-10 bg-gradient-gold rounded-full flex items-center justify-center flex-shrink-0">
+                  <span class="text-lg"><%= achievement.icon || "🏆" %></span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h4 class="font-semibold text-gray-900 dark:text-white text-sm">
+                    <%= achievement.title %>
+                  </h4>
+                  <p class="text-xs text-gray-600 dark:text-gray-400">
+                    <%= achievement.description %>
+                  </p>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="text-center py-6">
+            <span class="text-4xl mb-2 block">🌟</span>
+            <p class="text-gray-600 dark:text-gray-400 text-sm">
+              Complete lessons and courses to earn achievements!
+            </p>
+          </div>
+        <% end %>
+      </section>
+      
+      <!-- Recent Activity -->
+      <section class="gem-card p-6">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <span class="text-lg">📈</span>
+          Recent Activity
+        </h3>
+        
+        <% if @recent_activities.any? %>
+          <div class="space-y-3">
+            <% @recent_activities.each do |activity| %>
+              <div class="flex items-start gap-3 text-sm">
+                <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span class="text-xs"><%= activity.icon || "📝" %></span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-gray-900 dark:text-white">
+                    <%= activity.description %>
+                  </p>
+                  <p class="text-gray-600 dark:text-gray-400 text-xs">
+                    <%= time_ago_in_words(activity.created_at) %> ago
+                  </p>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="text-center py-6">
+            <span class="text-4xl mb-2 block">🚀</span>
+            <p class="text-gray-600 dark:text-gray-400 text-sm">
+              Start learning to see your activity here!
+            </p>
+          </div>
+        <% end %>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- Motivational Footer -->
+<div class="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 dark:from-blue-800 dark:via-purple-800 dark:to-blue-900 mt-16">
+  <div class="container-gem py-12 text-center">
+    <div class="animate-float mb-6">
+      <span class="text-6xl">💎</span>
+    </div>
+    <h2 class="text-3xl font-bold text-white mb-4">
+      Every expert was once a beginner
+    </h2>
+    <p class="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
+      Your learning journey is unique. Each lesson completed, each skill mastered, and each challenge overcome 
+      adds another precious gem to your collection of knowledge.
+    </p>
+    <a href="/courses" class="btn-gold">
+      Continue Your Journey
+    </a>
+  </div>
+</div>
