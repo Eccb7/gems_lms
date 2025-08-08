@@ -1,4 +1,5 @@
 class CoursesController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:index, :show]
   before_action :set_course, only: [ :show, :enroll, :leave ]
 
   def index
@@ -48,10 +49,10 @@ class CoursesController < ApplicationController
   end
 
   def show
-    authorize! :read, @course
+    authorize! :read, @course if user_signed_in?
 
-    @enrolled = current_user.enrolled_in?(@course) if user_signed_in?
-    @course_progress = current_user.course_progress(@course) if @enrolled
+    @enrolled = current_user&.enrolled_in?(@course) if user_signed_in?
+    @course_progress = current_user&.course_progress(@course) if @enrolled
     @sections = @course.sections.includes(lessons: [ :quiz, :assignments ])
 
     @instructor = @course.instructor
@@ -62,17 +63,23 @@ class CoursesController < ApplicationController
   end
 
   def enroll
-    authorize! :enroll, @course
+    authorize! :enroll, @course if user_signed_in?
 
     if current_user.enrolled_in?(@course)
       redirect_to @course, alert: "You are already enrolled in this course."
       return
     end
 
+    # Only allow direct enrollment for free courses
+    unless @course.is_free?
+      redirect_to @course, alert: "This is a paid course. Please complete payment to enroll."
+      return
+    end
+
     enrollment = current_user.enrollments.build(course: @course)
 
     if enrollment.save
-      NotificationService.create_course_enrollment_notification(current_user, @course)
+      # NotificationService.create_course_enrollment_notification(current_user, @course)
       redirect_to @course, notice: "Successfully enrolled in #{@course.title}!"
     else
       redirect_to @course, alert: "Unable to enroll in this course. #{enrollment.errors.full_messages.join(', ')}"
