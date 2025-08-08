@@ -42,6 +42,7 @@ class Course < ApplicationRecord
   # Scopes
   scope :published_courses, -> { where(status: :published) }
   scope :featured_courses, -> { where(featured: true) }
+  scope :featured, -> { where(featured: true) }
   scope :by_category, ->(category) { where(category: category) }
   scope :by_difficulty, ->(difficulty) { where(difficulty_level: difficulty) }
   scope :by_instructor, ->(instructor) { where(instructor: instructor) }
