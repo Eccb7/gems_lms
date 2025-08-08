@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  description: MyText
+  objectives: MyText
+  prerequisites: MyText
+  price: 9.99
+  status: 1
+  instructor: one
+  category: one
+  featured: false
+  published_at: 2025-08-08 10:37:21
+  duration_minutes: 1
+  difficulty_level: 1
+
+two:
+  title: MyString
+  description: MyText
+  objectives: MyText
+  prerequisites: MyText
+  price: 9.99
+  status: 1
+  instructor: two
+  category: two
+  featured: false
+  published_at: 2025-08-08 10:37:21
+  duration_minutes: 1
+  difficulty_level: 1
