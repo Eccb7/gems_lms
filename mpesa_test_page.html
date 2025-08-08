@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M-Pesa Integration Test - Gems of Insight</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'sapphire': {
+                            50: '#eff6ff',
+                            100: '#dbeafe', 
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a'
+                        },
+                        'gold': {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-sapphire-50 to-blue-100 min-h-screen font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-sapphire-800 mb-4">
+                    🚀 M-Pesa Integration Test
+                </h1>
+                <p class="text-lg text-gray-600">
+                    Gems of Insight - Daraja API Integration
+                </p>
+            </div>
+
+            <!-- Configuration Status -->
+            <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+                <h2 class="text-2xl font-semibold text-sapphire-700 mb-6 flex items-center">
+                    <span class="w-8 h-8 bg-sapphire-100 rounded-full flex items-center justify-center mr-3">
+                        📋
+                    </span>
+                    Configuration Status
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border-l-4 border-green-400">
+                            <span class="font-medium text-green-800">Consumer Key</span>
+                            <span class="text-green-600 font-mono text-sm">uXgYD3X...GoR ✅</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border-l-4 border-green-400">
+                            <span class="font-medium text-green-800">Business Short Code</span>
+                            <span class="text-green-600 font-mono">174379 ✅</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border-l-4 border-green-400">
+                            <span class="font-medium text-green-800">Consumer Secret</span>
+                            <span class="text-green-600 font-mono text-sm">aJeex4H...x6G ✅</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border-l-4 border-green-400">
+                            <span class="font-medium text-green-800">Pass Key</span>
+                            <span class="text-green-600 font-mono text-sm">bfb279f...ed2c919 ✅</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Integration Features -->
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                <!-- STK Push -->
+                <div class="bg-white rounded-2xl shadow-xl p-8">
+                    <h3 class="text-xl font-semibold text-sapphire-700 mb-4 flex items-center">
+                        <span class="w-6 h-6 bg-gold-100 rounded-full flex items-center justify-center mr-3">
+                            📱
+                        </span>
+                        STK Push
+                    </h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Automatic payment prompts
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Real-time authorization
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Safaricom integration
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Callback Handling -->
+                <div class="bg-white rounded-2xl shadow-xl p-8">
+                    <h3 class="text-xl font-semibold text-sapphire-700 mb-4 flex items-center">
+                        <span class="w-6 h-6 bg-gold-100 rounded-full flex items-center justify-center mr-3">
+                            🔄
+                        </span>
+                        Callback Handling
+                    </h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Payment confirmations
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Status tracking
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Automatic enrollment
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Implementation Details -->
+            <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+                <h2 class="text-2xl font-semibold text-sapphire-700 mb-6 flex items-center">
+                    <span class="w-8 h-8 bg-sapphire-100 rounded-full flex items-center justify-center mr-3">
+                        🛠️
+                    </span>
+                    Implementation Details
+                </h2>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="text-center p-6 bg-sapphire-50 rounded-lg">
+                        <div class="text-3xl font-bold text-sapphire-600 mb-2">Net::HTTP</div>
+                        <p class="text-sm text-gray-600">Standard Ruby HTTP client for API calls</p>
+                    </div>
+                    
+                    <div class="text-center p-6 bg-gold-50 rounded-lg">
+                        <div class="text-3xl font-bold text-gold-600 mb-2">Sandbox</div>
+                        <p class="text-sm text-gray-600">Testing environment with real credentials</p>
+                    </div>
+                    
+                    <div class="text-center p-6 bg-green-50 rounded-lg">
+                        <div class="text-3xl font-bold text-green-600 mb-2">Secure</div>
+                        <p class="text-sm text-gray-600">OAuth token-based authentication</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="bg-gradient-to-r from-sapphire-600 to-blue-700 rounded-2xl shadow-xl p-8 text-white">
+                <h2 class="text-2xl font-semibold mb-6 flex items-center">
+                    <span class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-3">
+                        🏁
+                    </span>
+                    Next Steps
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold mb-3">Testing Phase</h3>
+                        <ul class="space-y-2 text-sapphire-100">
+                            <li>• Test access token generation</li>
+                            <li>• Verify STK push functionality</li>
+                            <li>• Test callback processing</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-3">Production Readiness</h3>
+                        <ul class="space-y-2 text-sapphire-100">
+                            <li>• Configure production URLs</li>
+                            <li>• Set up SSL certificates</li>
+                            <li>• Monitor payment flows</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test Button -->
+            <div class="text-center mt-8">
+                <button onclick="testMpesaIntegration()" class="bg-gradient-to-r from-gold-500 to-gold-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+                    🧪 Start Rails Server to Test
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testMpesaIntegration() {
+            alert('🚀 Ready to test! Run: rails server\n\nThen navigate to a course page and test the M-Pesa payment integration with your Safaricom sandbox credentials.');
+        }
+    </script>
+</body>
+</html>

@@ -94,7 +94,7 @@ Before you begin, ensure you have the following installed:
 
 - **Ruby**: 3.3.0 or higher
 - **Rails**: 8.0.2 or higher
-- **PostgreSQL**: 14+ (or SQLite3 for development)
+- **PostgreSQL**: 14+
 - **Node.js**: 18+ (for asset compilation)
 - **Redis**: 6+ (for Sidekiq background jobs)
 - **ImageMagick**: For image processing
@@ -104,7 +104,7 @@ Before you begin, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/gems_lms.git
+git clone https://github.com/Eccb7/gems_lms.git
 cd gems_lms
 ```
 
