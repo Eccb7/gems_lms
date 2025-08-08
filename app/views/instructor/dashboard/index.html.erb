@@ -1,0 +1,317 @@
+<% content_for :title, "Instructor Dashboard - GEMS LMS" %>
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Instructor Dashboard</h1>
+    <p class="text-gray-600 mt-2">Manage your courses and track student progress</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Total Courses -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="ml-5 w-0 flex-1">
+          <dl>
+            <dt class="text-sm font-medium text-gray-500 truncate">My Courses</dt>
+            <dd class="text-2xl font-semibold text-gray-900"><%= current_user.courses.count %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Students -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="ml-5 w-0 flex-1">
+          <dl>
+            <dt class="text-sm font-medium text-gray-500 truncate">Total Students</dt>
+            <dd class="text-2xl font-semibold text-gray-900"><%= Enrollment.joins(:course).where(courses: { instructor: current_user }).count %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Published Courses -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="ml-5 w-0 flex-1">
+          <dl>
+            <dt class="text-sm font-medium text-gray-500 truncate">Published</dt>
+            <dd class="text-2xl font-semibold text-gray-900"><%= current_user.courses.published.count %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Review -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <div class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="ml-5 w-0 flex-1">
+          <dl>
+            <dt class="text-sm font-medium text-gray-500 truncate">Pending Review</dt>
+            <dd class="text-2xl font-semibold text-gray-900"><%= current_user.courses.pending_approval.count %></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions & Course Management -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+    <!-- My Courses -->
+    <div class="lg:col-span-2">
+      <div class="bg-white rounded-lg shadow">
+        <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+          <h3 class="text-lg font-semibold text-gray-900">My Courses</h3>
+          <%= link_to "Create New Course", new_instructor_course_path, class: "px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700" %>
+        </div>
+        <div class="p-6">
+          <% if current_user.courses.any? %>
+            <div class="space-y-4">
+              <% current_user.courses.includes(:category).order(created_at: :desc).limit(5).each do |course| %>
+                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                  <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                      <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-semibold text-sm"><%= course.title.first(2).upcase %></span>
+                      </div>
+                    </div>
+                    <div>
+                      <h4 class="font-semibold text-gray-900"><%= course.title %></h4>
+                      <p class="text-sm text-gray-600"><%= course.category.name %></p>
+                      <div class="flex items-center space-x-4 mt-1">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                          <% case course.status %>
+                          <% when 'published' %>
+                            bg-green-100 text-green-800
+                          <% when 'pending_approval' %>
+                            bg-yellow-100 text-yellow-800
+                          <% when 'draft' %>
+                            bg-gray-100 text-gray-800
+                          <% when 'archived' %>
+                            bg-red-100 text-red-800
+                          <% end %>">
+                          <%= course.status.humanize %>
+                        </span>
+                        <span class="text-xs text-gray-500">
+                          <%= pluralize(course.enrollments.count, 'student') %>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex space-x-2">
+                    <%= link_to "Edit", edit_instructor_course_path(course), class: "px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200" %>
+                    <%= link_to "View", instructor_course_path(course), class: "px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200" %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+            <% if current_user.courses.count > 5 %>
+              <div class="mt-4 pt-4 border-t text-center">
+                <%= link_to "View All My Courses", instructor_courses_path, class: "text-blue-600 hover:text-blue-800" %>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="text-center py-8">
+              <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+              </svg>
+              <h3 class="mt-2 text-sm font-medium text-gray-900">No courses yet</h3>
+              <p class="mt-1 text-sm text-gray-500">Get started by creating your first course.</p>
+              <div class="mt-6">
+                <%= link_to "Create Course", new_instructor_course_path, class: "inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="space-y-6">
+      <!-- Quick Actions -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+        <div class="space-y-3">
+          <%= link_to new_instructor_course_path, class: "flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg" do %>
+            <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Create New Course
+          <% end %>
+          
+          <%= link_to instructor_courses_path, class: "flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg" do %>
+            <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+            Manage Courses
+          <% end %>
+          
+          <%= link_to instructor_students_path, class: "flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg" do %>
+            <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+            </svg>
+            View Students
+          <% end %>
+          
+          <%= link_to instructor_analytics_path, class: "flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg" do %>
+            <svg class="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+            Analytics
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Pending Actions -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Pending Actions</h3>
+        <div class="space-y-4">
+          <!-- Assignments to Grade -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-medium text-gray-700">Assignments to Grade</span>
+              <span class="text-sm text-gray-500">
+                <%= AssignmentSubmission.joins(assignment: { lesson: { section: { course: :instructor } } })
+                                       .where(courses: { instructor: current_user })
+                                       .where(status: 'submitted')
+                                       .count %>
+              </span>
+            </div>
+            <% if AssignmentSubmission.joins(assignment: { lesson: { section: { course: :instructor } } })
+                                      .where(courses: { instructor: current_user })
+                                      .where(status: 'submitted').any? %>
+              <%= link_to "Review Submissions", instructor_assignments_path, class: "text-xs text-blue-600 hover:text-blue-800" %>
+            <% else %>
+              <span class="text-xs text-gray-500">No pending submissions</span>
+            <% end %>
+          </div>
+
+          <!-- Courses Pending Approval -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-medium text-gray-700">Courses Pending Review</span>
+              <span class="text-sm text-gray-500"><%= current_user.courses.pending_approval.count %></span>
+            </div>
+            <% if current_user.courses.pending_approval.any? %>
+              <%= link_to "View Pending", instructor_courses_path(status: 'pending_approval'), class: "text-xs text-blue-600 hover:text-blue-800" %>
+            <% else %>
+              <span class="text-xs text-gray-500">No courses pending</span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Enrollments</h3>
+        <div class="space-y-3">
+          <% Enrollment.joins(:course)
+                      .where(courses: { instructor: current_user })
+                      .includes(:user, :course)
+                      .order(created_at: :desc)
+                      .limit(3)
+                      .each do |enrollment| %>
+            <div class="flex items-start space-x-3">
+              <div class="flex-shrink-0">
+                <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                  <span class="text-xs font-medium text-gray-600"><%= enrollment.user.display_name.first(2).upcase %></span>
+                </div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-900 truncate">
+                  <%= enrollment.user.display_name %>
+                </p>
+                <p class="text-xs text-gray-500 truncate">
+                  Enrolled in <%= enrollment.course.title %>
+                </p>
+                <p class="text-xs text-gray-400">
+                  <%= time_ago_in_words(enrollment.created_at) %> ago
+                </p>
+              </div>
+            </div>
+          <% end %>
+          
+          <% if Enrollment.joins(:course).where(courses: { instructor: current_user }).empty? %>
+            <p class="text-sm text-gray-500">No enrollments yet</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Performance Overview -->
+  <div class="bg-white rounded-lg shadow">
+    <div class="p-6 border-b border-gray-200">
+      <h3 class="text-lg font-semibold text-gray-900">Course Performance</h3>
+    </div>
+    <div class="p-6">
+      <% if current_user.courses.published.any? %>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <% current_user.courses.published.includes(:enrollments).each do |course| %>
+            <div class="border border-gray-200 rounded-lg p-4">
+              <h4 class="font-semibold text-gray-900 mb-2"><%= course.title %></h4>
+              <div class="space-y-2">
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-600">Enrolled Students:</span>
+                  <span class="font-medium"><%= course.enrollments.count %></span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-600">Completion Rate:</span>
+                  <span class="font-medium">
+                    <% if course.enrollments.any? %>
+                      <%= (course.enrollments.where(completed: true).count.to_f / course.enrollments.count * 100).round(1) %>%
+                    <% else %>
+                      0%
+                    <% end %>
+                  </span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-600">Average Rating:</span>
+                  <span class="font-medium text-yellow-600">★ 4.8</span>
+                </div>
+              </div>
+              <div class="mt-4 pt-4 border-t">
+                <%= link_to "View Details", instructor_course_path(course), class: "text-blue-600 hover:text-blue-800 text-sm" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center py-8">
+          <p class="text-gray-500">No published courses to show performance data.</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
