@@ -1,0 +1,221 @@
+<% content_for :title, "M-Pesa Payment - #{@course.title}" %>
+
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md mx-auto">
+    
+    <!-- Payment Status Card -->
+    <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+      <!-- Loading Animation -->
+      <div id="payment-loading" class="mb-6">
+        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+          <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18l9-5-9-5-9 5 9 5z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 12l0 0"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 12l0 0"/>
+          </svg>
+        </div>
+        <h2 class="text-xl font-semibold text-gray-900 mb-2">Payment Initiated</h2>
+        <p class="text-gray-600 mb-4">Check your phone for M-Pesa prompt</p>
+        
+        <!-- Payment Details -->
+        <div class="bg-gray-50 rounded-lg p-4 mb-4">
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-gray-600">Course:</span>
+              <span class="font-medium"><%= @course.title %></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Amount:</span>
+              <span class="font-medium text-green-600">KES <%= number_with_delimiter(@payment.amount) %></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Phone:</span>
+              <span class="font-medium"><%= @payment.phone_number %></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Reference:</span>
+              <span class="font-medium text-xs"><%= @payment.mpesa_reference %></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="bg-blue-50 rounded-lg p-4 mb-6">
+          <div class="flex items-start">
+            <svg class="w-5 h-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <div class="text-sm text-blue-800 text-left">
+              <p class="font-medium mb-2">Complete your payment:</p>
+              <ol class="list-decimal list-inside space-y-1">
+                <li>Check your phone for M-Pesa notification</li>
+                <li>Enter your M-Pesa PIN when prompted</li>
+                <li>Wait for confirmation SMS</li>
+                <li>This page will update automatically</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <!-- Countdown Timer -->
+        <div class="mb-4">
+          <p class="text-sm text-gray-600">
+            Payment expires in: <span id="countdown" class="font-mono font-bold text-red-600">05:00</span>
+          </p>
+          <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+            <div id="progress-bar" class="bg-green-600 h-2 rounded-full transition-all duration-1000" style="width: 100%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Success State (Hidden initially) -->
+      <div id="payment-success" class="hidden">
+        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <h2 class="text-xl font-semibold text-gray-900 mb-2">Payment Successful!</h2>
+        <p class="text-gray-600 mb-6">You now have access to the course</p>
+        <%= link_to "Start Learning", @course, class: "inline-flex items-center px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition duration-200" %>
+      </div>
+
+      <!-- Failed State (Hidden initially) -->
+      <div id="payment-failed" class="hidden">
+        <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </div>
+        <h2 class="text-xl font-semibold text-gray-900 mb-2">Payment Failed</h2>
+        <p class="text-gray-600 mb-6" id="failure-message">Payment was not completed. Please try again.</p>
+        <div class="space-y-3">
+          <%= link_to "Try Again", @course, class: "inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-200" %>
+          <br>
+          <%= link_to "Back to Course", @course, class: "text-gray-600 hover:text-gray-800 transition duration-200" %>
+        </div>
+      </div>
+
+      <!-- Timeout State (Hidden initially) -->
+      <div id="payment-timeout" class="hidden">
+        <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-10 h-10 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h2 class="text-xl font-semibold text-gray-900 mb-2">Payment Timed Out</h2>
+        <p class="text-gray-600 mb-6">The payment request expired. Please try again.</p>
+        <div class="space-y-3">
+          <%= link_to "Try Again", @course, class: "inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-200" %>
+          <br>
+          <%= link_to "Back to Course", @course, class: "text-gray-600 hover:text-gray-800 transition duration-200" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="mt-6 bg-white rounded-lg shadow p-4">
+      <h3 class="font-semibold text-gray-900 mb-2">Need Help?</h3>
+      <div class="text-sm text-gray-600 space-y-2">
+        <p>• Make sure you have enough M-Pesa balance</p>
+        <p>• Check if your phone number is registered for M-Pesa</p>
+        <p>• Ensure you have network connectivity</p>
+        <p>• Contact support if payment fails repeatedly</p>
+      </div>
+      <div class="mt-4">
+        <%= link_to "Contact Support", contact_path, class: "text-blue-600 hover:text-blue-800 font-medium" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript for payment status checking -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const paymentId = <%= @payment.id %>;
+  let countdown = 300; // 5 minutes
+  let checkInterval;
+  let countdownInterval;
+
+  // Start countdown timer
+  function startCountdown() {
+    const countdownElement = document.getElementById('countdown');
+    const progressBar = document.getElementById('progress-bar');
+    
+    countdownInterval = setInterval(function() {
+      const minutes = Math.floor(countdown / 60);
+      const seconds = countdown % 60;
+      countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      
+      // Update progress bar
+      const progress = (countdown / 300) * 100;
+      progressBar.style.width = progress + '%';
+      
+      countdown--;
+      
+      if (countdown < 0) {
+        clearInterval(countdownInterval);
+        clearInterval(checkInterval);
+        showTimeoutState();
+      }
+    }, 1000);
+  }
+
+  // Check payment status
+  function checkPaymentStatus() {
+    fetch(`/payments/${paymentId}/check_payment_status`, {
+      method: 'GET',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'completed') {
+        clearInterval(checkInterval);
+        clearInterval(countdownInterval);
+        showSuccessState();
+      } else if (data.status === 'failed') {
+        clearInterval(checkInterval);
+        clearInterval(countdownInterval);
+        showFailedState(data.message);
+      } else if (data.status === 'timeout') {
+        clearInterval(checkInterval);
+        clearInterval(countdownInterval);
+        showTimeoutState();
+      }
+    })
+    .catch(error => {
+      console.error('Error checking payment status:', error);
+    });
+  }
+
+  function showSuccessState() {
+    document.getElementById('payment-loading').classList.add('hidden');
+    document.getElementById('payment-success').classList.remove('hidden');
+  }
+
+  function showFailedState(message) {
+    document.getElementById('payment-loading').classList.add('hidden');
+    document.getElementById('payment-failed').classList.remove('hidden');
+    if (message) {
+      document.getElementById('failure-message').textContent = message;
+    }
+  }
+
+  function showTimeoutState() {
+    document.getElementById('payment-loading').classList.add('hidden');
+    document.getElementById('payment-timeout').classList.remove('hidden');
+  }
+
+  // Start checking payment status every 5 seconds
+  checkInterval = setInterval(checkPaymentStatus, 5000);
+  
+  // Start countdown
+  startCountdown();
+  
+  // Initial status check
+  checkPaymentStatus();
+});
+</script>
