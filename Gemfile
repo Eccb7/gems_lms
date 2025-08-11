@@ -36,6 +36,7 @@ gem "groupdate"
 
 # Pagination
 gem "kaminari"
+gem "bootstrap4-kaminari-views"
 
 # Rich text editor
 gem "trix-rails", require: "trix"
