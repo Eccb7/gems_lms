@@ -2,8 +2,8 @@ class Payment < ApplicationRecord
   belongs_to :user
   belongs_to :course
 
-  enum status: { pending: 0, completed: 1, failed: 2, refunded: 3, initiated: 4, timeout: 5 }
-  enum payment_method: { stripe: 0, paypal: 1, bank_transfer: 2, mpesa: 3 }
+  enum :status, { pending: 0, completed: 1, failed: 2, refunded: 3, initiated: 4, timeout: 5 }
+  enum :payment_method, { stripe: 0, paypal: 1, bank_transfer: 2, mpesa: 3 }
 
   validates :amount, presence: true, numericality: { greater_than: 0 }
   validates :currency, presence: true
