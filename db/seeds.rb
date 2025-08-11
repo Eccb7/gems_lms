@@ -1,12 +1,14 @@
-# Create default categories
-puts "Creating categories..."
+# Create natural healing categories
+puts "Creating natural healing categories..."
 categories = [
-  { name: "Programming", description: "Learn programming languages and software development", color: "#3B82F6" },
-  { name: "Data Science", description: "Data analysis, machine learning, and statistics", color: "#8B5CF6" },
-  { name: "Design", description: "UI/UX Design, Graphic Design, and Creative Arts", color: "#EC4899" },
-  { name: "Business", description: "Entrepreneurship, Marketing, and Business Management", color: "#10B981" },
-  { name: "Mathematics", description: "Mathematics, Statistics, and Mathematical Concepts", color: "#F59E0B" },
-  { name: "Language", description: "Foreign languages and communication skills", color: "#EF4444" }
+  { name: "Herbal Medicine", description: "Traditional plant-based healing and herbal remedies", color: "#059669" },
+  { name: "Nutrition & Wellness", description: "Natural nutrition, superfoods, and dietary healing", color: "#10B981" },
+  { name: "Aromatherapy", description: "Essential oils, aromatherapy practices, and natural scents", color: "#8B5CF6" },
+  { name: "Holistic Health", description: "Mind-body-spirit wellness and integrative health approaches", color: "#3B82F6" },
+  { name: "Natural Detox", description: "Natural cleansing, detoxification, and body purification", color: "#F59E0B" },
+  { name: "Energy Healing", description: "Reiki, chakra balancing, and energy therapy practices", color: "#EC4899" },
+  { name: "Herbal Consultation", description: "Professional herbal consulting and client assessment", color: "#EF4444" },
+  { name: "Traditional Medicine", description: "Ancient healing traditions from around the world", color: "#6366F1" }
 ]
 
 categories.each do |cat_attrs|
@@ -29,26 +31,26 @@ admin = User.find_or_create_by(email: "admin@gems-lms.com") do |user|
   user.active = true
 end
 
-# Create sample instructors
-puts "Creating instructor users..."
+# Create natural healing instructors
+puts "Creating natural healing instructor users..."
 instructors = [
   {
-    email: "john.doe@gems-lms.com",
-    first_name: "John",
-    last_name: "Doe",
-    bio: "Senior Software Engineer with 10+ years of experience in web development and programming education."
+    email: "dr.sarah.green@gems-lms.com",
+    first_name: "Dr. Sarah",
+    last_name: "Green",
+    bio: "Certified Clinical Herbalist with 15+ years of experience in herbal medicine and natural healing. Author of 'Nature's Pharmacy' and founder of Green Wellness Institute."
   },
   {
-    email: "jane.smith@gems-lms.com",
-    first_name: "Jane",
-    last_name: "Smith",
-    bio: "Data Scientist and ML Engineer passionate about teaching data science and analytics."
+    email: "maria.luna@gems-lms.com",
+    first_name: "Maria",
+    last_name: "Luna",
+    bio: "Master Aromatherapist and Essential Oil Expert. Specializes in therapeutic-grade oils and holistic wellness practices with certifications from NAHA and AIA."
   },
   {
-    email: "mike.wilson@gems-lms.com",
-    first_name: "Mike",
-    last_name: "Wilson",
-    bio: "UX/UI Designer with expertise in modern design principles and user experience."
+    email: "david.earth@gems-lms.com",
+    first_name: "David",
+    last_name: "Earth",
+    bio: "Traditional Medicine Practitioner and Energy Healer. Trained in multiple indigenous healing traditions and certified Reiki Master with 20+ years of practice."
   }
 ]
 
@@ -83,68 +85,69 @@ students = []
   students << student
 end
 
-# Create sample courses
-puts "Creating sample courses..."
-programming_category = Category.find_by(name: "Programming")
-data_science_category = Category.find_by(name: "Data Science")
-design_category = Category.find_by(name: "Design")
+# Create natural healing courses
+puts "Creating natural healing courses..."
+herbal_medicine_category = Category.find_by(name: "Herbal Medicine")
+nutrition_category = Category.find_by(name: "Nutrition & Wellness")
+aromatherapy_category = Category.find_by(name: "Aromatherapy")
+holistic_health_category = Category.find_by(name: "Holistic Health")
 
 courses_data = [
   {
-    title: "Complete Ruby on Rails Bootcamp",
-    description: "Learn Ruby on Rails from scratch and build real-world web applications. This comprehensive course covers everything from Ruby basics to advanced Rails concepts including testing, deployment, and best practices.",
-    objectives: "• Master Ruby programming fundamentals\n• Build complete web applications with Rails\n• Understand MVC architecture\n• Learn database design and Active Record\n• Implement user authentication and authorization\n• Deploy applications to production",
-    prerequisites: "Basic understanding of HTML and CSS. No prior programming experience required.",
-    price: 99.99,
-    category: programming_category,
+    title: "Complete Herbal Medicine Certification",
+    description: "Master the ancient art of herbal healing with this comprehensive certification course. Learn to identify, harvest, and prepare medicinal plants for therapeutic use. Discover the healing properties of over 100 herbs and their applications.",
+    objectives: "• Identify and harvest 100+ medicinal plants\n• Understand plant energetics and therapeutic actions\n• Prepare tinctures, teas, and herbal formulations\n• Create personalized herbal protocols\n• Practice ethical wildcrafting and sustainability\n• Gain certification in clinical herbalism",
+    prerequisites: "No prior experience required. Passion for natural healing essential.",
+    price: 297.00,
+    category: herbal_medicine_category,
     instructor: created_instructors[0],
     difficulty_level: "beginner",
     featured: true,
     status: "published"
   },
   {
-    title: "Data Science with Python",
-    description: "Comprehensive data science course using Python. Learn data analysis, visualization, machine learning, and statistical modeling with real-world projects and datasets.",
-    objectives: "• Master Python for data science\n• Learn pandas, numpy, and matplotlib\n• Understand statistical concepts\n• Build machine learning models\n• Create data visualizations\n• Work with real datasets",
-    prerequisites: "Basic Python knowledge recommended but not required.",
-    price: 149.99,
-    category: data_science_category,
+    title: "Essential Oils & Aromatherapy Mastery",
+    description: "Dive deep into the therapeutic world of essential oils. Learn extraction methods, safety protocols, and therapeutic applications. Create custom blends for emotional, physical, and spiritual wellness.",
+    objectives: "• Master 50+ essential oils and their properties\n• Understand extraction and quality testing\n• Learn safety protocols and dilution ratios\n• Create therapeutic blends for various conditions\n• Practice aromatic consultations\n• Develop signature product lines",
+    prerequisites: "Open heart and desire to learn nature's aromatherapy.",
+    price: 197.00,
+    category: aromatherapy_category,
     instructor: created_instructors[1],
     difficulty_level: "intermediate",
     featured: true,
     status: "published"
   },
   {
-    title: "Modern UI/UX Design Principles",
-    description: "Learn modern design principles and create stunning user interfaces. This course covers design theory, prototyping, user research, and industry-standard design tools.",
-    objectives: "• Understand design fundamentals\n• Learn color theory and typography\n• Master design tools like Figma\n• Conduct user research\n• Create prototypes and wireframes\n• Design responsive interfaces",
-    prerequisites: "No prior design experience required.",
-    price: 79.99,
-    category: design_category,
-    instructor: created_instructors[2],
+    title: "Holistic Nutrition & Superfoods",
+    description: "Transform your health through nature's pharmacy of foods. Learn the healing power of nutrition, superfoods, and dietary protocols. Discover how food can be your medicine in this comprehensive wellness course.",
+    objectives: "• Understand nutritional healing principles\n• Master superfoods and their benefits\n• Design therapeutic meal plans\n• Learn food combining and energetics\n• Practice intuitive eating methods\n• Create personalized nutrition protocols",
+    prerequisites: "Willingness to embrace food as medicine.",
+    price: 147.00,
+    category: nutrition_category,
+    instructor: created_instructors[1],
     difficulty_level: "beginner",
     featured: false,
     status: "published"
   },
   {
-    title: "Advanced JavaScript and React",
-    description: "Master modern JavaScript and React development. Build complex single-page applications with state management, routing, and API integration.",
-    objectives: "• Master ES6+ JavaScript features\n• Build React applications\n• Implement state management\n• Work with APIs\n• Testing JavaScript applications\n• Deploy React apps",
-    prerequisites: "Basic JavaScript and HTML/CSS knowledge required.",
-    price: 129.99,
-    category: programming_category,
-    instructor: created_instructors[0],
-    difficulty_level: "advanced",
+    title: "Energy Healing & Reiki Mastery",
+    description: "Awaken your natural healing abilities through energy work. Learn Reiki, chakra balancing, and various energy healing modalities. Connect with universal life force energy for healing self and others.",
+    objectives: "• Master Reiki healing techniques\n• Understand chakra system and energy anatomy\n• Practice energy clearing and protection\n• Learn distance healing methods\n• Develop intuitive healing abilities\n• Receive Reiki attunements and certifications",
+    prerequisites: "Open mind and heart to energy healing.",
+    price: 247.00,
+    category: holistic_health_category,
+    instructor: created_instructors[2],
+    difficulty_level: "intermediate",
     featured: true,
     status: "published"
   },
   {
-    title: "Free Introduction to Programming",
-    description: "A completely free course to get started with programming. Learn fundamental concepts that apply to any programming language.",
-    objectives: "• Understand programming concepts\n• Learn problem-solving skills\n• Introduction to algorithms\n• Basic programming syntax\n• Debugging techniques",
-    prerequisites: "No prerequisites - perfect for complete beginners.",
+    title: "Free Introduction to Natural Healing",
+    description: "A completely free introduction to the world of natural healing. Discover the foundational principles of herbal medicine, holistic wellness, and nature's pharmacy.",
+    objectives: "• Understand natural healing principles\n• Learn about medicinal plants basics\n• Introduction to holistic wellness\n• Basic herbal preparation methods\n• Safety in natural healing",
+    prerequisites: "No prerequisites - perfect for natural healing beginners.",
     price: 0.0,
-    category: programming_category,
+    category: herbal_medicine_category,
     instructor: created_instructors[0],
     difficulty_level: "beginner",
     featured: true,
@@ -295,13 +298,13 @@ students.first(3).each do |student|
       transaction_id: "GEMS_#{Time.current.strftime('%Y%m%d_%H%M%S')}_#{SecureRandom.hex(4)}",
       status: status,
       mpesa_receipt_number: status == 'completed' ? "#{rand(100000000..999999999)}" : nil,
-      completed_at: status == 'completed' ? rand(7.days).seconds.ago : nil,
+      transaction_date: status == 'completed' ? rand(7.days).seconds.ago : nil,
       created_at: rand(30.days).seconds.ago
     )
 
     # Enroll student if payment completed
     if payment.status == 'completed'
-      course.enrollments.create!(user: student, enrolled_at: payment.completed_at)
+      course.enrollments.create!(user: student, enrolled_at: payment.transaction_date)
     end
   end
 end
