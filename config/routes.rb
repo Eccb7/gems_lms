@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { registrations: "users/registrations" }
 
   # Landing page for non-authenticated users
   get "landing", to: "pages#landing"
