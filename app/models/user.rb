@@ -22,6 +22,7 @@ class User < ApplicationRecord
   has_many :activities, dependent: :destroy
   has_many :achievements, dependent: :destroy
   has_many :lesson_completions, dependent: :destroy
+  has_many :payments, dependent: :destroy
 
   # Validations
   validates :first_name, presence: true
