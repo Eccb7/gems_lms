@@ -200,17 +200,17 @@ After seeding, you can log in with these default accounts:
 
 ### Admin User
 - **Email**: admin@gems.com
-- **Password**: password
+- **Password**: password123
 - **Role**: Administrator
 
 ### Instructor Users
 - **Email**: instructor1@gems.com, instructor2@gems.com, instructor3@gems.com
-- **Password**: password
+- **Password**: password123
 - **Role**: Instructor
 
 ### Student Users
 - **Email**: student1@gems.com through student10@gems.com
-- **Password**: password
+- **Password**: password123
 - **Role**: Student
 
 ## 📁 Project Structure
